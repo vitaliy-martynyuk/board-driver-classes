@@ -763,9 +763,9 @@ LOAD D:/STM32CubeIDE_2.2.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externa
  .debug_macro   0x00001539       0x6a ./Src/main.o
  .debug_macro   0x000015a3      0x1df ./Src/main.o
 
-.debug_line     0x00000000      0x668
- .debug_line    0x00000000      0x5ed ./Src/main.o
- .debug_line    0x000005ed       0x7b ./Startup/startup_stm32c031c6tx.o
+.debug_line     0x00000000      0x666
+ .debug_line    0x00000000      0x5eb ./Src/main.o
+ .debug_line    0x000005eb       0x7b ./Startup/startup_stm32c031c6tx.o
 
 .debug_str      0x00000000     0x5f73
  .debug_str     0x00000000     0x5f73 ./Src/main.o
