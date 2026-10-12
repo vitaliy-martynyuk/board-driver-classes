@@ -1,7 +1,7 @@
 #ifndef HW_REGISTERS_H_
 #define HW_REGISTERS_H_
 
-#include "../domain/domain.h"
+#include "../domain/types.h"
 
 struct GpioRegisters
 {
@@ -22,5 +22,7 @@ static_assert(sizeof(GpioRegisters) == 0x2C);
 inline volatile GpioRegisters* const gpioA { reinterpret_cast<GpioRegisters*>(0x5000'0000u) };
 inline volatile GpioRegisters* const gpioC { reinterpret_cast<GpioRegisters*>(0x5000'0800u) };
 inline volatile Register* const rccIopenr { reinterpret_cast<volatile Register*>(0x4002'1034u) };
+inline constexpr Register rccIopenrGpioaEn { 0x1u << 0 };
+inline constexpr Register rccIopenrGpiocEn { 0x1u << 2 };
 
 #endif
