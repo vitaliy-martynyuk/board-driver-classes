@@ -1,7 +1,7 @@
 #ifndef HW_REGISTERS_H_
 #define HW_REGISTERS_H_
 
-#include "../domain/domain.h"
+#include "../domain/types.h"
 
 struct GpioRegisters
 {

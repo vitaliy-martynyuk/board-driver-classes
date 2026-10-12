@@ -4,5 +4,6 @@
 #include <cstdint>
 
 using Register = std::uint32_t;
+using Pin = std::uint8_t;
 
 #endif
