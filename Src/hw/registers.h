@@ -14,13 +14,13 @@ struct GpioRegisters
     volatile Register bsrr;        // 0x18
     volatile Register lckr;        // 0x1C
     volatile Register afrl;        // 0x20
-    volatile Register afhr;        // 0x24
+    volatile Register afrh;        // 0x24
     volatile Register brr;         // 0x28
 };
 static_assert(sizeof(GpioRegisters) == 0x2C);
 
-inline volatile GpioRegisters* gpioA { reinterpret_cast<GpioRegisters*>(0x5000'0000u) };
-inline volatile GpioRegisters* gpioC { reinterpret_cast<GpioRegisters*>(0x5000'0800u) };
-inline volatile Register* rccIopenr { reinterpret_cast<volatile Register*>(0x4002'1034u) };
+inline volatile GpioRegisters* const gpioA { reinterpret_cast<GpioRegisters*>(0x5000'0000u) };
+inline volatile GpioRegisters* const gpioC { reinterpret_cast<GpioRegisters*>(0x5000'0800u) };
+inline volatile Register* const rccIopenr { reinterpret_cast<volatile Register*>(0x4002'1034u) };
 
 #endif
