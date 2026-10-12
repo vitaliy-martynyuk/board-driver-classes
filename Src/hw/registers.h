@@ -3,6 +3,9 @@
 
 #include "../domain/types.h"
 
+#define RCC_IOPENR_GPIOA_EN (0x1u)
+#define RCC_IOPENR_GPIOC_EN (0x1u << 2)
+
 struct GpioRegisters
 {
     volatile Register moder;       // 0x00
