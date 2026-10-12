@@ -3,8 +3,9 @@
 
 #include "./_pin_mask.h"
 #include "../hw/registers.h"
+#include <cstdint>
 
-enum class Port
+enum class Port : std::uint8_t
 {
     a, c
 };

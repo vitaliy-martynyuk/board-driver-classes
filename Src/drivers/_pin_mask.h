@@ -5,11 +5,11 @@
 #include "../domain/constants.h"
 #include <cassert>
 #include <cstdlib>
+#include <cstdint>
 
-enum class PW
+enum class FieldWidth : std::uint8_t
 {
-    s,  // 1 bit
-    d,  // 2 bits
+    oneBit = 1, twoBits = 2
 };
 
 class PinMask
@@ -26,30 +26,33 @@ public:
         return m_pin;
     }
 
-    [[nodiscard]] constexpr Register fieldMask(PW w) const
+    [[nodiscard]] constexpr Register fieldMask(FieldWidth w) const
     {
+        auto pos { shift(w) };
+
         switch (w)
         {
-        case PW::s:
-            return static_cast<Register>(0x1u << m_pin);
-        case PW::d:
-            return static_cast<Register>(0x3u << static_cast<Pin>(m_pin * 2));
+        case FieldWidth::oneBit:
+            return static_cast<Register>(0x1u << pos);
+        case FieldWidth::twoBits:
+            return static_cast<Register>(0x3u << pos);
         default:
             assert(false && "Invalid pin width!");
             std::abort();
         }
     }
 
-    [[nodiscard]] constexpr Register fieldValue(Register value, PW w) const
+    [[nodiscard]] constexpr Register fieldValue(Register value,
+                                                FieldWidth w) const
     {
         auto mask { fieldMask(w) };
+        auto pos { shift(w) };
 
         switch (w)
         {
-        case PW::s:
-            return (value << m_pin) & mask;
-        case PW::d:
-            return (value << static_cast<Pin>(m_pin * 2)) & mask;
+        case FieldWidth::oneBit:
+        case FieldWidth::twoBits:
+            return (value << pos) & mask;
         default:
             assert(false && "Invalid pin width!");
             std::abort();
@@ -58,6 +61,11 @@ public:
 
 private:
     Pin m_pin { Constants::minPin };
+
+    constexpr Pin shift(FieldWidth w) const
+    {
+        return m_pin * static_cast<Pin>(w);
+    }
 };
 
 #endif
