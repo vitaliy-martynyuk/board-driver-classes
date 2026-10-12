@@ -3,16 +3,17 @@
 #include "../hw/registers.h"
 #include "../domain/types.h"
 #include <cstdlib>
+#include <cassert>
 
 void enableClock(Port port)
 {
     switch (port)
     {
     case Port::a:
-        *rccIopenr |= static_cast<Register>(RCC_IOPENR_GPIOA_EN);
+        *rccIopenr |= rccIopenrGpioaEn;
         return;
     case Port::c:
-        *rccIopenr |= static_cast<Register>(RCC_IOPENR_GPIOC_EN);
+        *rccIopenr |= rccIopenrGpiocEn;
         return;
     default:
         assert(false && "Unsupported port!");

@@ -3,9 +3,6 @@
 
 #include "../domain/types.h"
 
-#define RCC_IOPENR_GPIOA_EN (0x1u)
-#define RCC_IOPENR_GPIOC_EN (0x1u << 2)
-
 struct GpioRegisters
 {
     volatile Register moder;       // 0x00
@@ -25,5 +22,7 @@ static_assert(sizeof(GpioRegisters) == 0x2C);
 inline volatile GpioRegisters* const gpioA { reinterpret_cast<GpioRegisters*>(0x5000'0000u) };
 inline volatile GpioRegisters* const gpioC { reinterpret_cast<GpioRegisters*>(0x5000'0800u) };
 inline volatile Register* const rccIopenr { reinterpret_cast<volatile Register*>(0x4002'1034u) };
+inline constexpr Register rccIopenrGpioaEn { 0x1u << 0 };
+inline constexpr Register rccIopenrGpiocEn { 0x1u << 2 };
 
 #endif

@@ -1,9 +1,16 @@
-#ifndef DRIVERS__PIN_MASK_H_
-#define DRIVERS__PIN_MASK_H_
+#ifndef DRIVERS_PIN_MASK_H_
+#define DRIVERS_PIN_MASK_H_
 
 #include "../domain/types.h"
 #include "../domain/constants.h"
 #include <cassert>
+#include <cstdlib>
+
+enum class PW
+{
+    s,  // 1 bit
+    d,  // 2 bits
+};
 
 class PinMask
 {
@@ -19,14 +26,34 @@ public:
         return m_pin;
     }
 
-    [[nodiscard]] constexpr Register fieldMask() const
+    [[nodiscard]] constexpr Register fieldMask(PW w) const
     {
-        return static_cast<Register>(0x1u << m_pin);
+        switch (w)
+        {
+        case PW::s:
+            return static_cast<Register>(0x1u << m_pin);
+        case PW::d:
+            return static_cast<Register>(0x3u << static_cast<Pin>(m_pin * 2));
+        default:
+            assert(false && "Invalid pin width!");
+            std::abort();
+        }
     }
 
-    [[nodiscard]] constexpr Register field2Mask() const
+    [[nodiscard]] constexpr Register fieldValue(Register value, PW w) const
     {
-        return static_cast<Register>(0x3u << static_cast<Pin>(m_pin * 2));
+        auto mask { fieldMask(w) };
+
+        switch (w)
+        {
+        case PW::s:
+            return (value << m_pin) & mask;
+        case PW::d:
+            return (value << static_cast<Pin>(m_pin * 2)) & mask;
+        default:
+            assert(false && "Invalid pin width!");
+            std::abort();
+        }
     }
 
 private:

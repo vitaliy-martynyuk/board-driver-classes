@@ -1,5 +1,5 @@
-#ifndef DOMAIN__TYPES_H_
-#define DOMAIN__TYPES_H_
+#ifndef DOMAIN_TYPES_H_
+#define DOMAIN_TYPES_H_
 
 #include <cstdint>
 
