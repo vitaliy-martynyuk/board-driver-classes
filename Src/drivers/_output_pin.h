@@ -15,7 +15,7 @@ public:
     OutputPin(Port port, Pin pin) :
             m_port { port }, m_reg { portRegisters(port) }, m_pinMask { pin }
     {
-        assert(m_pinMask.pin() <= Constants::maxPin);
+        using namespace Gpio;
 
         enableClock(m_port);
 
@@ -33,12 +33,13 @@ public:
 private:
     Port m_port { };
     volatile GpioRegisters* const m_reg { };
-    PinMask m_pinMask { };
+    PinMask m_pinMask;
 
     void writeField(volatile Register& reg, FieldWidth width, Register value)
     {
         const auto mask { m_pinMask.fieldMask(width) };
-        reg = (reg & ~mask) | value;
+        const auto fieldValue { m_pinMask.fieldValue(value, width) };
+        reg = (reg & ~mask) | fieldValue;
     }
 };
 
