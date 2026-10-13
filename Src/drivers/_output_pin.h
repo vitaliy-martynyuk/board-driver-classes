@@ -3,6 +3,7 @@
 
 #include "./_port.h"
 #include "./_pin_mask.h"
+#include "./_helpers.h"
 #include "../domain/types.h"
 #include "../domain/constants.h"
 #include <cassert>
@@ -12,7 +13,7 @@ class OutputPin
 public:
     OutputPin(const OutputPin&) = delete;
 
-    OutputPin(Port port, Pin pin) :
+    OutputPin(Port port, Pin pin, bool level = false) :
             m_port { port }, m_reg { portRegisters(port) }, m_pinMask { pin }
     {
         using namespace Gpio;
@@ -24,25 +25,32 @@ public:
         const auto pull { static_cast<Register>(Pull::none) };
         const auto mode { static_cast<Register>(Mode::output) };
 
-        writeField(m_reg->otyper, FieldWidth::oneBit, type);
-        writeField(m_reg->ospeedr, FieldWidth::twoBits, speed);
-        writeField(m_reg->pupdr, FieldWidth::twoBits, pull);
-        writeField(m_reg->moder, FieldWidth::twoBits, mode);
+        Helpers::writeField(m_reg->otyper, m_pinMask, FieldWidth::oneBit, type);
+        Helpers::writeField(m_reg->ospeedr, m_pinMask, FieldWidth::twoBits,
+                            speed);
+        Helpers::writeField(m_reg->pupdr, m_pinMask, FieldWidth::twoBits, pull);
+        Helpers::writeBsrr(m_reg->bsrr, pin, level);
+        Helpers::writeField(m_reg->moder, m_pinMask, FieldWidth::twoBits, mode);
+    }
+
+    Pin pin() const
+    {
+        return m_pinMask.pin();
     }
 
     void set() const
     {
-        writeBsrr(true);
+        Helpers::writeBsrr(m_reg->bsrr, pin(), true);
     }
 
     void reset() const
     {
-        writeBsrr(false);
+        Helpers::writeBsrr(m_reg->bsrr, pin(), false);
     }
 
     void write(bool level) const
     {
-        writeBsrr(level);
+        Helpers::writeBsrr(m_reg->bsrr, pin(), level);
     }
 
     [[nodiscard]] bool isSet() const
@@ -56,20 +64,6 @@ private:
     Port m_port { };
     volatile GpioRegisters* const m_reg { };
     PinMask m_pinMask;
-
-    void writeField(volatile Register& reg, FieldWidth width,
-                    Register value) const
-    {
-        const auto mask { m_pinMask.fieldMask(width) };
-        const auto fieldValue { m_pinMask.fieldValue(value, width) };
-        reg = (reg & ~mask) | fieldValue;
-    }
-
-    void writeBsrr(bool level) const
-    {
-        auto pos { level ? m_pinMask.pin() : m_pinMask.pin() + 16u };
-        m_reg->bsrr = 0x1u << pos;
-    }
 };
 
 #endif

@@ -7,6 +7,7 @@ namespace Constants
 {
     constexpr Pin minPin { 0 };
     constexpr Pin maxPin { 15 };
+    constexpr Pin pinPerPort { maxPin + 1u };
 }
 
 #endif
