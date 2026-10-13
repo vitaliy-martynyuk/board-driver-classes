@@ -1,5 +1,5 @@
-#ifndef DRIVERS__INPUT_PIN_H_
-#define DRIVERS__INPUT_PIN_H_
+#ifndef DRIVERS_INPUT_PIN_H_
+#define DRIVERS_INPUT_PIN_H_
 
 #include "./_pin_mask.h"
 #include "./_port.h"
@@ -30,7 +30,7 @@ public:
     {
         const auto mask { m_pinMask.fieldMask(FieldWidth::oneBit) };
 
-        return (m_reg->idr & mask) != 0u;
+        return Helpers::isSet(m_reg->idr, mask);
     }
 
 private:

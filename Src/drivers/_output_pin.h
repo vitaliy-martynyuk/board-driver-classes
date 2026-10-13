@@ -49,11 +49,11 @@ public:
         Helpers::writeBsrr(m_reg->bsrr, m_pinMask, level);
     }
 
-    [[nodiscard]] bool isSet() const
+    [[nodiscard]] bool read() const
     {
         const auto mask { m_pinMask.fieldMask(FieldWidth::oneBit) };
 
-        return (m_reg->odr & mask) != 0u;
+        return Helpers::isSet(m_reg->odr, mask);
     }
 
 private:

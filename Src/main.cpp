@@ -1,19 +1,9 @@
 #include "./drivers/drivers.h"
-#include <cstdint>
 
-//static void delay()
-//{
-//    volatile std::uint32_t i = 0;
-//    while (i < 180000)
-//    {
-//        ++i;
-//    }
-//}
-
-int main(void)
+int main()
 {
-    OutputPin ld4 { Port::a, 5 };
-    InputPin b1 { Port::c, 13 };
+    OutputPin ld4 { Port::a, 5 };   // active-high
+    InputPin b1 { Port::c, 13 };    // active-low
 
     while (true)
     {

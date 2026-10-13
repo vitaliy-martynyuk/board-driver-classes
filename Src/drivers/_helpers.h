@@ -23,6 +23,11 @@ namespace Helpers
 
         reg = 0x1u << pos;
     }
+
+    inline bool isSet(Register reg, Register mask)
+    {
+        return (reg & mask) != 0u;
+    }
 }
 
 #endif
