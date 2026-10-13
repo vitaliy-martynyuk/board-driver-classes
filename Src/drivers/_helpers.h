@@ -17,7 +17,7 @@ namespace Helpers
 
     inline void writeBsrr(volatile Register& reg, Pin pin, bool level)
     {
-        auto pos { level ? pin : pin + Constants::pinPerPort };
+        auto pos { level ? pin : pin + Constants::pinsPerPort };
 
         reg = 0x1u << pos;
     }
