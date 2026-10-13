@@ -6,6 +6,7 @@
 #include "./_helpers.h"
 #include "../domain/types.h"
 #include "../domain/constants.h"
+#include "../hw/registers.h"
 #include <cassert>
 
 class OutputPin
@@ -14,11 +15,11 @@ public:
     OutputPin(const OutputPin&) = delete;
 
     OutputPin(Port port, Pin pin, bool level = false) :
-            m_port { port }, m_reg { portRegisters(port) }, m_pinMask { pin }
+            m_reg { portRegisters(port) }, m_pinMask { pin }
     {
         using namespace Gpio;
 
-        enableClock(m_port);
+        enableClock(port);
 
         const auto type { static_cast<Register>(Type::pushPull) };
         const auto speed { static_cast<Register>(Speed::low) };
@@ -56,7 +57,6 @@ public:
     }
 
 private:
-    Port m_port { };
     volatile GpioRegisters* const m_reg { };
     PinMask m_pinMask;
 };
