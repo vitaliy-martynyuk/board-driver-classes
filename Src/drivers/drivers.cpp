@@ -17,13 +17,12 @@ void enableClock(Port port)
     case Port::c:
         *rccIopenr |= rccIopenrGpiocEn;
         break;
-        return;
     default:
         assert(false && "Unsupported port!");
         std::abort();
     }
 
-    *rccIopenr; // read RCC to make sure changes applied
+    static_cast<void>(*rccIopenr); // read back so the clock enable takes effect before GPIO access
 }
 
 volatile GpioRegisters* portRegisters(Port port)
