@@ -1,5 +1,7 @@
 #include "./drivers.h"
-#include "./tests.h"
+#include "./_port.h"
+#include "./_pin_mask.h"
+#include "./_tests.h"
 #include "../hw/registers.h"
 #include "../domain/types.h"
 #include <cstdlib>
@@ -11,14 +13,16 @@ void enableClock(Port port)
     {
     case Port::a:
         *rccIopenr |= rccIopenrGpioaEn;
-        return;
+        break;
     case Port::c:
         *rccIopenr |= rccIopenrGpiocEn;
-        return;
+        break;
     default:
         assert(false && "Unsupported port!");
         std::abort();
     }
+
+    static_cast<void>(*rccIopenr); // read back so the clock enable takes effect before GPIO access
 }
 
 volatile GpioRegisters* portRegisters(Port port)
