@@ -2,6 +2,7 @@
 #define HW_REGISTERS_H_
 
 #include "../domain/types.h"
+#include <cstdint>
 
 struct GpioRegisters
 {
@@ -22,7 +23,32 @@ static_assert(sizeof(GpioRegisters) == 0x2C);
 inline volatile GpioRegisters* const gpioA { reinterpret_cast<GpioRegisters*>(0x5000'0000u) };
 inline volatile GpioRegisters* const gpioC { reinterpret_cast<GpioRegisters*>(0x5000'0800u) };
 inline volatile Register* const rccIopenr { reinterpret_cast<volatile Register*>(0x4002'1034u) };
-inline constexpr Register rccIopenrGpioaEn { 0x1u << 0 };
-inline constexpr Register rccIopenrGpiocEn { 0x1u << 2 };
+constexpr Register rccIopenrGpioaEn { 0x1u << 0 };
+constexpr Register rccIopenrGpiocEn { 0x1u << 2 };
+
+enum class MODER : std::uint8_t
+{
+    input = 0x0, output = 0x1, alternate = 0x2, analog = 0x3,
+};
+
+enum class OTYPER : std::uint8_t
+{
+    pushPull = 0x0, openDrain = 0x1,
+};
+
+enum class OSPEEDR : std::uint8_t
+{
+    veryLow = 0x0, low = 0x1, high = 0x2, veryHigh = 0x3,
+};
+
+enum class PUPDR : std::uint8_t
+{
+    none = 0x0, pullUp = 0x1, pullDown = 0x2,
+};
+
+enum class LCKR : std::uint8_t
+{
+    unlock = 0x0, lock = 0x1,
+};
 
 #endif
