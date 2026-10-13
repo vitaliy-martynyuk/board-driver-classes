@@ -3,6 +3,7 @@
 
 int main(void)
 {
-    /* Loop forever */
+    OutputPin ld4 { Port::a, 5 };
+    ld4.set();
     for (;;);
 }

@@ -30,12 +30,35 @@ public:
         writeField(m_reg->moder, FieldWidth::twoBits, mode);
     }
 
+    void set() const
+    {
+        writeField(m_reg->bsrr, FieldWidth::oneBit, 0x1);
+    }
+
+    void reset() const
+    {
+        writeField(m_reg->bsrr, FieldWidth::oneBit, 0x0);
+    }
+
+    void write(bool level) const
+    {
+        writeField(m_reg->bsrr, FieldWidth::oneBit,
+                   static_cast<Register>(level));
+    }
+
+    [[nodiscard]] bool isSet() const
+    {
+        return static_cast<bool>(m_reg->bsrr
+                & m_pinMask.fieldMask(FieldWidth::oneBit));
+    }
+
 private:
     Port m_port { };
     volatile GpioRegisters* const m_reg { };
     PinMask m_pinMask;
 
-    void writeField(volatile Register& reg, FieldWidth width, Register value)
+    void writeField(volatile Register& reg, FieldWidth width,
+                    Register value) const
     {
         const auto mask { m_pinMask.fieldMask(width) };
         const auto fieldValue { m_pinMask.fieldValue(value, width) };
