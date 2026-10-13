@@ -29,28 +29,23 @@ public:
         Helpers::writeField(m_reg->ospeedr, m_pinMask, FieldWidth::twoBits,
                             speed);
         Helpers::writeField(m_reg->pupdr, m_pinMask, FieldWidth::twoBits, pull);
-        Helpers::writeBsrr(m_reg->bsrr, pin, level);
+        Helpers::writeBsrr(m_reg->bsrr, m_pinMask, level);
         Helpers::writeField(m_reg->moder, m_pinMask, FieldWidth::twoBits, mode);
-    }
-
-    Pin pin() const
-    {
-        return m_pinMask.pin();
     }
 
     void set() const
     {
-        Helpers::writeBsrr(m_reg->bsrr, pin(), true);
+        Helpers::writeBsrr(m_reg->bsrr, m_pinMask, true);
     }
 
     void reset() const
     {
-        Helpers::writeBsrr(m_reg->bsrr, pin(), false);
+        Helpers::writeBsrr(m_reg->bsrr, m_pinMask, false);
     }
 
     void write(bool level) const
     {
-        Helpers::writeBsrr(m_reg->bsrr, pin(), level);
+        Helpers::writeBsrr(m_reg->bsrr, m_pinMask, level);
     }
 
     [[nodiscard]] bool isSet() const

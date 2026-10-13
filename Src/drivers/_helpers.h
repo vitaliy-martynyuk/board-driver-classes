@@ -15,9 +15,11 @@ namespace Helpers
         reg = (reg & ~mask) | fieldValue;
     }
 
-    inline void writeBsrr(volatile Register& reg, Pin pin, bool level)
+    inline void writeBsrr(volatile Register& reg, const PinMask& pinMask,
+                          bool level)
     {
-        auto pos { level ? pin : pin + Constants::pinsPerPort };
+        auto pos {
+                level ? pinMask.pin() : pinMask.pin() + Constants::pinsPerPort };
 
         reg = 0x1u << pos;
     }
