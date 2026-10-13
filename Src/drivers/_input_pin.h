@@ -28,9 +28,7 @@ public:
 
     [[nodiscard]] bool read() const
     {
-        const auto mask { m_pinMask.fieldMask(FieldWidth::oneBit) };
-
-        return Helpers::isSet(m_reg->idr, mask);
+        return Helpers::isSet(m_reg->idr, m_pinMask, FieldWidth::oneBit);
     }
 
 private:

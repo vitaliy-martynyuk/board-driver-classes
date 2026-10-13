@@ -24,8 +24,11 @@ namespace Helpers
         reg = 0x1u << pos;
     }
 
-    inline bool isSet(Register reg, Register mask)
+    [[nodiscard]] inline bool isSet(Register reg, const PinMask& pinMask,
+                                    FieldWidth width)
     {
+        const auto mask { pinMask.fieldMask(width) };
+
         return (reg & mask) != 0u;
     }
 }
