@@ -36,19 +36,3 @@ volatile GpioRegisters* portRegisters(Port port)
         std::abort();
     }
 }
-
-namespace Helpers
-{
-    void lockPort(volatile GpioRegisters* const port)
-    {
-        port->lckr |= (static_cast<Register>(0x1 << 16));
-        port->lckr |= (static_cast<Register>(0x0 << 16));
-        port->lckr |= (static_cast<Register>(0x1 << 16));
-    }
-
-    void setPinLock(volatile GpioRegisters* const port, Pin pin, LCKR lock)
-    {
-        const auto value { static_cast<Register>(lock) };
-        port->lckr |= (PinMask { pin }.fieldValue(value, FieldWidth::oneBit));
-    }
-}

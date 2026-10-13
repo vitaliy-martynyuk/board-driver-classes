@@ -26,29 +26,24 @@ inline volatile Register* const rccIopenr { reinterpret_cast<volatile Register*>
 constexpr Register rccIopenrGpioaEn { 0x1u << 0 };
 constexpr Register rccIopenrGpiocEn { 0x1u << 2 };
 
-enum class MODER : std::uint8_t
+enum class Mode : std::uint8_t
 {
     input = 0x0, output = 0x1, alternate = 0x2, analog = 0x3,
 };
 
-enum class OTYPER : std::uint8_t
+enum class Type : std::uint8_t
 {
     pushPull = 0x0, openDrain = 0x1,
 };
 
-enum class OSPEEDR : std::uint8_t
+enum class Speed : std::uint8_t
 {
     veryLow = 0x0, low = 0x1, high = 0x2, veryHigh = 0x3,
 };
 
-enum class PUPDR : std::uint8_t
+enum class Pull : std::uint8_t
 {
     none = 0x0, pullUp = 0x1, pullDown = 0x2,
-};
-
-enum class LCKR : std::uint8_t
-{
-    unlock = 0x0, lock = 0x1,
 };
 
 #endif

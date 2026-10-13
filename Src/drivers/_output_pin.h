@@ -12,29 +12,34 @@ class OutputPin
 public:
     OutputPin(const OutputPin&) = delete;
 
-    constexpr OutputPin(Port port, Pin pin) :
-            m_port { port }, m_pin { pin }
+    OutputPin(Port port, Pin pin) :
+            m_port { port }, m_reg { portRegisters(port) }, m_pinMask { pin }
     {
-        assert(m_pin <= Constants::maxPin);
+        assert(m_pinMask.pin() <= Constants::maxPin);
 
         enableClock(m_port);
-        auto* const reg { portRegisters(m_port) };
-        const PinMask pinMask { pin };
 
-        const auto type { static_cast<Register>(OTYPER::pushPull) };
-        const auto speed { static_cast<Register>(OSPEEDR::low) };
-        const auto pull { static_cast<Register>(PUPDR::none) };
-        const auto mode { static_cast<Register>(MODER::output) };
+        const auto type { static_cast<Register>(Type::pushPull) };
+        const auto speed { static_cast<Register>(Speed::low) };
+        const auto pull { static_cast<Register>(Pull::none) };
+        const auto mode { static_cast<Register>(Mode::output) };
 
-        reg->otyper |= pinMask.fieldValue(type, FieldWidth::oneBit);
-        reg->ospeedr |= pinMask.fieldValue(speed, FieldWidth::twoBits);
-        reg->pupdr |= pinMask.fieldValue(pull, FieldWidth::twoBits);
-        reg->moder |= pinMask.fieldValue(mode, FieldWidth::twoBits);
+        writeField(m_reg->otyper, FieldWidth::oneBit, type);
+        writeField(m_reg->ospeedr, FieldWidth::twoBits, speed);
+        writeField(m_reg->pupdr, FieldWidth::twoBits, pull);
+        writeField(m_reg->moder, FieldWidth::twoBits, mode);
     }
 
 private:
-    Port m_port { Port::a };
-    Pin m_pin { Constants::minPin };
+    Port m_port { };
+    volatile GpioRegisters* const m_reg { };
+    PinMask m_pinMask { };
+
+    void writeField(volatile Register& reg, FieldWidth width, Register value)
+    {
+        const auto mask { m_pinMask.fieldMask(width) };
+        reg = (reg & ~mask) | value;
+    }
 };
 
 #endif
