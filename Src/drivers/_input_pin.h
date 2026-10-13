@@ -28,7 +28,7 @@ public:
 
     [[nodiscard]] bool read() const
     {
-        return Helpers::isSet(m_reg->idr, m_pinMask, FieldWidth::oneBit);
+        return Helpers::isSet(m_reg->idr, m_pinMask);
     }
 
 private:

@@ -51,7 +51,7 @@ public:
 
     [[nodiscard]] bool isSet() const
     {
-        return Helpers::isSet(m_reg->odr, m_pinMask, FieldWidth::oneBit);
+        return Helpers::isSet(m_reg->odr, m_pinMask);
     }
 
 private:
