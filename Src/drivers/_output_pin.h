@@ -32,24 +32,24 @@ public:
 
     void set() const
     {
-        writeField(m_reg->bsrr, FieldWidth::oneBit, 0x1);
+        writeBsrr(true);
     }
 
     void reset() const
     {
-        writeField(m_reg->bsrr, FieldWidth::oneBit, 0x0);
+        writeBsrr(false);
     }
 
     void write(bool level) const
     {
-        writeField(m_reg->bsrr, FieldWidth::oneBit,
-                   static_cast<Register>(level));
+        writeBsrr(level);
     }
 
     [[nodiscard]] bool isSet() const
     {
-        return static_cast<bool>(m_reg->bsrr
-                & m_pinMask.fieldMask(FieldWidth::oneBit));
+        const auto mask { m_pinMask.fieldMask(FieldWidth::oneBit) };
+
+        return (m_reg->odr & mask) != 0u;
     }
 
 private:
@@ -63,6 +63,12 @@ private:
         const auto mask { m_pinMask.fieldMask(width) };
         const auto fieldValue { m_pinMask.fieldValue(value, width) };
         reg = (reg & ~mask) | fieldValue;
+    }
+
+    void writeBsrr(bool level) const
+    {
+        auto pos { level ? m_pinMask.pin() : m_pinMask.pin() + 16u };
+        m_reg->bsrr = 0x1u << pos;
     }
 };
 
