@@ -3,18 +3,15 @@
 
 #include "../drivers/drivers.h"
 #include "../domain/types.h"
+#include "./_helpers.h"
 #include <cstdint>
-
-enum class Polarity : std::uint8_t
-{
-    activeLow, activeHigh
-};
 
 class Led
 {
 public:
     Led(Port port, Pin pin, Polarity polarity) :
-            m_pin { port, pin, !activeLevel(polarity) }, m_polarity { polarity }
+            m_pin { port, pin, !Helpers::activeLevel(polarity) },
+            m_polarity { polarity }
     {
     }
 
@@ -25,12 +22,12 @@ public:
 
     void on() const
     {
-        m_pin.write(activeLevel(m_polarity));
+        m_pin.write(Helpers::activeLevel(m_polarity));
     }
 
     void off() const
     {
-        m_pin.write(!activeLevel(m_polarity));
+        m_pin.write(!Helpers::activeLevel(m_polarity));
     }
 
     void toggle() const
@@ -40,17 +37,12 @@ public:
 
     [[nodiscard]] bool isOn() const
     {
-        return m_pin.isSet() == activeLevel(m_polarity);
+        return m_pin.isSet() == Helpers::activeLevel(m_polarity);
     }
 
 private:
     OutputPin m_pin;
     Polarity m_polarity;
-
-    [[nodiscard]] static constexpr bool activeLevel(Polarity polarity)
-    {
-        return polarity == Polarity::activeHigh;
-    }
 };
 
 #endif

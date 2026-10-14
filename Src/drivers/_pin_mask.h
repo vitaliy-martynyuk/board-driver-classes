@@ -7,6 +7,11 @@
 #include <cstdlib>
 #include <cstdint>
 
+enum class Polarity : std::uint8_t
+{
+    activeLow, activeHigh
+};
+
 enum class FieldWidth : std::uint8_t
 {
     oneBit = 1, twoBits = 2
