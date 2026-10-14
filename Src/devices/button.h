@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <optional>
 
-enum class ButtonEvent
+enum class ButtonEvent : std::uint8_t
 {
     pressed, released
 };
@@ -17,24 +17,25 @@ class Button
 {
 public:
     Button(Port port, Pin pin, Gpio::Pull pull, Polarity polarity,
-           std::uint32_t stableTicks) :
-            m_pin { port, pin }, m_event { ButtonEvent::released },
+           std::uint8_t stableTicks) :
+            m_pin { port, pin, pull }, m_event { ButtonEvent::released },
             m_polarity { polarity }, m_debounceCountMax { stableTicks }
     {
     }
 
     Button(Port port, Pin pin) :
-            Button { port, pin, Gpio::Pull::none, Polarity::activeLow, 5u }
+            Button { port, pin, Gpio::Pull::none, Polarity::activeLow, 20u }
     {
     }
 
     void sample()
     {
-        const bool newState { m_pin.read() == Helpers::activeLevel(m_polarity) };
+        const bool newState { m_pin.read()
+                == DeviceHelpers::activeLevel(m_polarity) };
         const bool currentState { isPressed() };
         if (newState != currentState)
         {
-            if (m_debounceCount == m_debounceCountMax)
+            if (m_debounceCount == (m_debounceCountMax - 1))
             {
                 m_event =
                         currentState ?
@@ -46,6 +47,10 @@ public:
             {
                 ++m_debounceCount;
             }
+        }
+        else
+        {
+            m_debounceCount = 0;
         }
     }
 
@@ -70,8 +75,8 @@ private:
     InputPin m_pin;
     ButtonEvent m_event;
     Polarity m_polarity;
-    std::uint32_t m_debounceCount { 0 };
-    std::uint32_t m_debounceCountMax { 0 };
+    std::uint8_t m_debounceCount { 0 };
+    std::uint8_t m_debounceCountMax { 0 };
     bool m_eventFlag { false };
 };
 

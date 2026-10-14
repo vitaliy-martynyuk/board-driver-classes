@@ -1,9 +1,14 @@
-#ifndef DEVICES__HELPERS_H_
-#define DEVICES__HELPERS_H_
+#ifndef DEVICES_HELPERS_H_
+#define DEVICES_HELPERS_H_
 
 #include "../drivers/drivers.h"
 
-namespace Helpers
+enum class Polarity : std::uint8_t
+{
+    activeLow, activeHigh
+};
+
+namespace DeviceHelpers
 {
     [[nodiscard]] constexpr bool activeLevel(Polarity polarity)
     {
