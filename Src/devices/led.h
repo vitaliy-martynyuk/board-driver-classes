@@ -14,7 +14,7 @@ class Led
 {
 public:
     Led(Port port, Pin pin, Polarity polarity) :
-            m_pin { port, pin, static_cast<bool>(polarity) },
+            m_pin { port, pin, !static_cast<bool>(polarity) },
             m_polarity { polarity }
     {
     }
@@ -26,24 +26,17 @@ public:
 
     void on() const
     {
-        m_pin.set();
+        m_polarity == Polarity::activeHigh ? m_pin.set() : m_pin.reset();
     }
 
     void off() const
     {
-        m_pin.reset();
+        m_polarity == Polarity::activeHigh ? m_pin.reset() : m_pin.set();
     }
 
     void toggle() const
     {
-        if (m_pin.isSet())
-        {
-            m_pin.reset();
-        }
-        else
-        {
-            m_pin.set();
-        }
+        m_pin.write(!m_pin.isSet());
     }
 
     [[nodiscard]] bool isOn() const

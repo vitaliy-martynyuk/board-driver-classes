@@ -4,7 +4,7 @@
 int main()
 {
     Led ld4 { Port::a, 5 };         // active-high
-    Led extLed { Port::c, 7 };                 // active-high
+    Led extLed { Port::c, 7 };      // active-high
     InputPin b1 { Port::c, 13 };    // active-low
 
     while (true)
