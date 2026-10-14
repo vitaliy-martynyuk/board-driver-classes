@@ -1,12 +1,25 @@
 #include "./drivers/drivers.h"
+#include "./devices/led.h"
+#include "./devices/button.h"
 
 int main()
 {
-    OutputPin ld4 { Port::a, 5 };   // active-high
-    InputPin b1 { Port::c, 13 };    // active-low
+    Led ld4 { Port::a, 5 };         // active-high
+    Led extLed { Port::c, 7 };      // active-high
+    Button b1 { Port::c, 13 };      // active-low
 
     while (true)
     {
-        ld4.write(!b1.read());
+        b1.sample();
+        if (b1.isPressed())
+        {
+            ld4.on();
+            extLed.off();
+        }
+        else
+        {
+            ld4.off();
+            extLed.on();
+        }
     }
 }
