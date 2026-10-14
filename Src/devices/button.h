@@ -7,6 +7,8 @@
 #include "../hw/registers.h"
 #include <cstdint>
 #include <optional>
+#include <cassert>
+#include <cstdlib>
 
 enum class ButtonEvent : std::uint8_t
 {
@@ -21,6 +23,11 @@ public:
             m_pin { port, pin, pull }, m_event { ButtonEvent::released },
             m_polarity { polarity }, m_debounceCountMax { stableTicks }
     {
+        if (stableTicks == 0)
+        {
+            assert(false && "Debounce can't equal 0");
+            std::abort();
+        }
     }
 
     Button(Port port, Pin pin) :
